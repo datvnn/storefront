@@ -45,7 +45,7 @@ export async function generateMetadata(
 		description: product.seoDescription || productNameAndVariant,
 		alternates: {
 			canonical: process.env.NEXT_PUBLIC_STOREFRONT_URL
-				? process.env.NEXT_PUBLIC_STOREFRONT_URL + `/products/${encodeURIComponent(params.slug)}`
+				? process.env.NEXT_PUBLIC_STOREFRONT_URL + `/${params.channel}/products/${encodeURIComponent(params.slug)}`
 				: undefined,
 		},
 		openGraph: product.thumbnail
