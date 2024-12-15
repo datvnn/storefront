@@ -36,6 +36,7 @@ export async function generateMetadata(
 		notFound();
 	}
 
+	const channel = params.channel;
 	const productName = product.seoTitle || product.name;
 	const variantName = product.variants?.find(({ id }) => id === searchParams.variant)?.name;
 	const productNameAndVariant = variantName ? `${productName} - ${variantName}` : productName;
@@ -45,7 +46,7 @@ export async function generateMetadata(
 		description: product.seoDescription || productNameAndVariant,
 		alternates: {
 			canonical: process.env.NEXT_PUBLIC_STOREFRONT_URL
-				? process.env.NEXT_PUBLIC_STOREFRONT_URL + `/products/${encodeURIComponent(params.slug)}`
+				? process.env.NEXT_PUBLIC_STOREFRONT_URL + `/${channel}/products/${encodeURIComponent(params.slug)}`
 				: undefined,
 		},
 		openGraph: product.thumbnail
@@ -56,7 +57,7 @@ export async function generateMetadata(
 							alt: product.name,
 						},
 					],
-			  }
+				}
 			: null,
 	};
 }
@@ -132,11 +133,11 @@ export default async function Page({
 	const price = selectedVariant?.pricing?.price?.gross
 		? formatMoney(selectedVariant.pricing.price.gross.amount, selectedVariant.pricing.price.gross.currency)
 		: isAvailable
-		  ? formatMoneyRange({
+			? formatMoneyRange({
 					start: product?.pricing?.priceRange?.start?.gross,
 					stop: product?.pricing?.priceRange?.stop?.gross,
-		    })
-		  : "";
+				})
+			: "";
 
 	const productJsonLd: WithContext<Product> = {
 		"@context": "https://schema.org",
@@ -154,7 +155,7 @@ export default async function Page({
 						priceCurrency: selectedVariant.pricing?.price?.gross.currency,
 						price: selectedVariant.pricing?.price?.gross.amount,
 					},
-			  }
+				}
 			: {
 					name: product.name,
 
@@ -168,7 +169,7 @@ export default async function Page({
 						lowPrice: product.pricing?.priceRange?.start?.gross.amount,
 						highPrice: product.pricing?.priceRange?.stop?.gross.amount,
 					},
-			  }),
+				}),
 	};
 
 	return (
